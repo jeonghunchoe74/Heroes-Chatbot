@@ -1,0 +1,298 @@
+
+/* ==============================
+   전체 스테이지 (파란 배경)
+   ============================== */
+.stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #bcd1ff; /* 스크린샷과 유사한 하늘+보라 톤 */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* 휴대폰 프레임 */
+.phone {
+  width: 360px;
+  height: 720px;
+  background: #eef2f7;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 24, 72, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: #1f2937;
+}
+
+/* ==============================
+   상단 바
+   ============================== */
+.topbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: linear-gradient(#f6f7f9, #e9edf2);
+  border-bottom: 1px solid #d9dee7;
+}
+
+.back-icon {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.avatar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fef3c7; /* 은은한 베이스 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-fallback {
+  position: absolute;
+  font-size: 18px;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.actions .reset-icon {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ==============================
+   칠판 배경 + 채팅 영역
+   ============================== */
+.chalkboard {
+  position: relative;
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  /* 칠판처럼 보이는 연한 초록 배경 + 패턴 */
+  background-color: #e6f0da;
+  background-image:
+    radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+/* 메시지 레이어를 마스코트보다 위로 올림 */
+.message-wrapper {
+  position: relative;
+  z-index: 2; /* 🟢 채팅이 항상 맨 위로 */
+}
+
+/* 하단의 마스코트(워렌 버핏 일러스트 자리) */
+.mascot {
+  position: sticky;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 70px; /* 입력바 위 */
+  width: 220px;
+  opacity: 0.9;
+  pointer-events: none;
+  text-align: center;
+  z-index: 1; /* 🔵 마스코트는 뒤로 */
+}
+
+.mascot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.9; /* 기존 0.9에서 살짝 낮춤 */
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
+
+/* 프레임 애니메이션 (입이 아래로 약간 열렸다 닫힘) */
+@keyframes openMouth {
+  0%   { transform: scaleY(1) translateY(0); filter: brightness(1); }
+  20%  { transform: scaleY(1.02) translateY(1px); filter: brightness(1.1); }
+  40%  { transform: scaleY(1.05) translateY(2px); filter: brightness(1.2); }
+  60%  { transform: scaleY(1.04) translateY(1px); filter: brightness(1.15); }
+  80%  { transform: scaleY(1.02) translateY(0); filter: brightness(1.1); }
+  100% { transform: scaleY(1) translateY(0); filter: brightness(1); }
+}
+
+/* 🗣️ 입 벌리는 애니메이션 */
+.mascot.talk img {
+  animation: openMouth 0.9s ease-in-out;
+}
+
+.mascot-fallback {
+  font-size: 28px;
+  opacity: 0.8;
+}
+
+/* 빈 상태 힌트 */
+.empty-hint {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 24px;
+}
+
+/* ==============================
+   메시지 버블
+   기존 클래스명을 최대한 유지하여 로직 변경 없이 스타일만 개선
+   ============================== */
+.message-wrapper {
+  display: flex;
+  margin: 6px 0;
+}
+
+.message-wrapper.user {
+  justify-content: flex-end;
+}
+
+.message-wrapper.assistant {
+  justify-content: flex-start;
+}
+
+.message {
+  max-width: 78%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  line-height: 1.4;
+  font-size: 14px;
+  background: #fff;
+  color: #1f2937;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.message.user {
+  background: #4f7df6;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.message.assistant {
+  background: #ffffff;
+  color: #111827;
+  border-bottom-left-radius: 4px;
+}
+
+/* 로딩 도트 */
+.message.loading {
+  background: #ffffff;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.loading-dots .dot {
+  width: 6px;
+  height: 6px;
+  background-color: #9ca3af;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* ==============================
+   하단 입력 바 (화이트 캡슐 + 초록 화살표)
+   ============================== */
+.input-bar {
+  padding: 10px 12px 16px;
+  background: transparent;
+}
+
+.input-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 10px 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.input-pill input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #111827;
+  background: transparent;
+}
+
+.send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #eefcf0;
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-btn:active {
+  transform: scale(0.96);
+}
+
+/* 초록 화살표 (CSS 순수 도형) */
+.send-btn .arrow {
+  width: 0;
+  height: 0;
+  border-left: 12px solid #2ecc53; /* 본체 색상 */
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  margin-left: 2px;
+}
+
+/* 작은 화면 대응 */
+@media (max-height: 680px) {
+  .phone { height: 640px; }
+  .mascot { bottom: 76px; width: 190px; }
+}
