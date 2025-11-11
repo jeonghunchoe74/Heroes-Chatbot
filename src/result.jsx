@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMentor } from "./mentorContext";
 import "./result.css";
 import cloud1 from "./fonts/Cloud1.png";
 import peter from "./fonts/peter.png";
@@ -37,24 +38,21 @@ const mentorData = {
     };
 
     const Result = () => {
-    const [mentor, setMentor] = useState("");
+    const { getMentor } = useMentor();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const savedMentor = localStorage.getItem("assignedMentor");
-        if (savedMentor) setMentor(savedMentor);
-    }, []);
-
-    if (!mentor) {
+    // Context에서 assignedMentor 키로 멘토 가져오기
+    const mentorName = getMentor("assignedMentor"); 
+    if (!mentorName) {
         return (
-        <div className="mymen-container">
-            <img src={cloud1} alt="background" className="mymen-bg" />
-        </div>
+            <div className="mymen-container">
+                <img src={cloud1} alt="background" className="mymen-bg" />
+            </div>
         );
     }
 
     const { image, type, desc, cardBorder, cardBg, buttonBg, descBg, chatRoute } =
-        mentorData[mentor] || {};
+        mentorData[mentorName] || {};
 
     const handleMovePage = () => {
         navigate("/chat");
@@ -74,10 +72,10 @@ const mentorData = {
         />
 
         {/* 멘토 이미지 */}
-        {image && <img src={image} alt={mentor} className="mymen-image" />}
+        {image && <img src={image} alt={mentorName} className="mymen-image" />}
 
         {/* 이름, 유형, 설명 */}
-        <div className="mymen-name">{mentor}</div>
+        <div className="mymen-name">{mentorName}</div>
         <div className="mymen-type">{type}</div>
         <div className="mymen-desc-box" style={{ backgroundColor: descBg }}>
             <div className="mymen-desc-text">{desc}</div>

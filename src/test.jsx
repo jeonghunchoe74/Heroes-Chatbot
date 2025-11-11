@@ -8,7 +8,7 @@ const Test = () => {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState([]);
-    const { setMentor } = useMentor();
+    const { saveMentor } = useMentor();
     const navigate = useNavigate();
 
     const questions = [
@@ -69,7 +69,7 @@ const Test = () => {
         setTimeout(() => {
             setLoading(false);
             const mentor = getMentor();
-            setMentor(mentor);
+            saveMentor("assignedMentor", mentor);
             localStorage.setItem("assignedMentor", mentor);
             navigate("/result");
         }, 2000);

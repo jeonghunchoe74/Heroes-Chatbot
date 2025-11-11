@@ -18,7 +18,7 @@
     inset: 0;
     object-fit: cover;
     object-position: center;
-    opacity: 0.5;
+    opacity: 50;
     z-index: 1; /* 👈 -1 대신 1로 변경 (사라짐 방지) */
 }
 
@@ -135,7 +135,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.5;
+    opacity: 50;
     z-index: 1;
 }
 

@@ -176,7 +176,7 @@ function Home() {
 
               {/* 📖 영웅과 스터디 */}
               <div
-                onClick={() => navigate("/test")}
+                onClick={() => navigate("/choose-men")}
                 style={{
                   width: 260,
                   height: 100,

@@ -16,7 +16,7 @@
   top: 0;
   position: absolute;
   object-fit: cover;
-  opacity: 50%;
+  opacity: 50;
 }
 
 /* 상단 타이틀 */

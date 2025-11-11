@@ -265,7 +265,7 @@ function MyPage() {
                 </div>
 
                 <div
-                onClick={() => navigate("/chat")}
+                onClick={() => navigate("/choose-men")}
                 style={{
                     width: 362,
                     height: 45,

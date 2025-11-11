@@ -273,7 +273,6 @@ const mentorData = {
             <Row withAvatar>
             <LeftBubble style={{ marginTop: 30 }}>{intro}</LeftBubble>
             {visibleStep >= 1 && <LeftBubble style={{ marginTop: 10 }}>{followUp}</LeftBubble>}
-
             {visibleStep >= 2 && (
                 <div
                 style={{

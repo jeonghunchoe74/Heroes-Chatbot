@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MentorProvider } from "./mentorContext";
 import React, { useState } from "react";
 import './App.css';
 import Landing from "./landing";
@@ -8,11 +9,15 @@ import Result from "./result";
 import ChatRoom from "./chatRoom";
 import MyPage from "./mypage";
 import Menu from "./menu";
+import ChooseMen from "./chooseMen";
+import RoomChoose from "./rooomChoose";
+import ManyChat from "./manyChat";
 
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
+  <MentorProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -20,7 +25,9 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/test" element={<Test />} />
         <Route path="/result" element={<Result />} />
-        
+        <Route path="/choose-men" element={<ChooseMen />} />
+        <Route path="/choose-room" element={<RoomChoose />} />
+        <Route path="/group-chat" element={<ManyChat />} />
         <Route
           path="/chat"
           element={
@@ -58,6 +65,7 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
+    </MentorProvider>
   );
 }
 
