@@ -1,0 +1,133 @@
+.mymen-container {
+  width: 402px;
+  height: 874px;
+  position: relative;
+  background: white;
+  overflow: hidden;
+  margin: 0 auto;
+  font-family: 'SF Pro', sans-serif;
+  z-index: 0;
+}
+
+.mymen-bg {
+  width: 402px;
+  height: 874px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  object-fit: cover;
+  opacity: 50%;
+}
+
+/* 상단 타이틀 */
+.mymen-title {
+  width: 223px;
+  height: 17px;
+  left: 89px;
+  top: 140px;
+  position: absolute;
+  text-align: center;
+  color: #7A7A7A;
+  font-size: 20px;
+  font-family: 'SF Pro';
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* 프로필 카드 영역 */
+.mymen-card {
+  width: 362px;
+  height: 312px;
+  left: 20px;
+  top: 210px;
+  position: absolute;
+  background: white;
+  border: 1.5px solid black;
+}
+
+/* 멘토 이미지 */
+.mymen-image {
+  width: 124.5px;
+  height: 186.76px;
+  left: 137.77px;
+  top: 220px;
+  position: absolute;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* 이름 */
+.mymen-name {
+  left: 161px;
+  top: 410px;
+  position: absolute;
+  text-align: center;
+  color: black;
+  font-size: 20px;
+  font-family: 'SF Pro';
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* 유형 */
+.mymen-type {
+  left: 173px;
+  top: 440px;
+  position: absolute;
+  text-align: center;
+  color: #797979;
+  font-size: 11px;
+  font-family: 'SF Pro';
+  font-weight: 510;
+  word-wrap: break-word;
+}
+
+/* 설명 박스 */
+.mymen-desc-box {
+  width: 306px;
+  height: 31px;
+  left: 48px;
+  top: 470px;
+  position: absolute;
+  background: #E6F4FF;
+  border: 1px solid black;
+
+  /* ✅ 텍스트 가운데 정렬을 위한 flex 설정 */
+  display: flex;
+  align-items: center;  /* 세로 가운데 */
+  justify-content: center;  /* 가로 가운데 */
+}
+
+/* 설명 텍스트 */
+.mymen-desc-text {
+  color: black;
+  font-size: 11px;
+  font-family: 'SF Pro';
+  font-weight: 400;
+  word-wrap: break-word;
+  position: static;
+}
+
+/* 버튼 영역 */
+.mymen-button {
+  width: 362px;
+  height: 52px;
+  position: absolute;
+  left: 20px;
+  top: 601px;
+  border: 1px solid black;
+  cursor: pointer;
+
+  display: flex;            /* ✅ 글씨 가운데 정렬 */
+  align-items: center;
+  justify-content: center;
+}
+
+/* 버튼 텍스트 */
+.mymen-button-text {
+  color: white;
+  font-size: 17px;
+  font-family: 'SF Pro';
+  font-weight: 700;
+  word-wrap: break-word;
+}
