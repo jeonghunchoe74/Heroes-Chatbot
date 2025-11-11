@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from app.services.chatbot_service import generate_response, reset_session
+from app.services.chatbot_service import generate_response, reset_session, get_initial_message
 
 router = APIRouter(prefix="/chatbot", tags=["Chatbot"])
 
@@ -15,6 +15,35 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
     session_id: str
+
+@router.get("/init/{guru_id}")
+async def chatbot_init(guru_id: str):
+    """
+    챗봇 초기 진입 시 — 대가 철학 + 관련 뉴스 3건 반환
+    """
+    try:
+        init_data = await get_initial_message(guru_id)
+        return init_data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/analyze")
+async def analyze_article(data: dict):
+    """
+    특정 뉴스 기사에 대해 대가가 분석 발언
+    """
+    content = data.get("content") or data.get("summary", "")
+    guru_id = data.get("guru_id", "buffet")
+    question = f"""
+            이 뉴스 기사에 대해 {guru_id}로서 투자 관점에서 간단히 분석해줘.
+            무조건적으로 이 뉴스가 관련된 섹터를 "반도체", "유틸리티", "금융서비스", "소프트웨어·서비스", "에너지", "소재",
+            "자동차·부품", "통신서비스", "보험", "은행", "헬스케어 장비·서비스" 중 하나로 명시해줘.
+            {content}
+        """
+    ai_response, _ = await generate_response(question, None, guru_id)
+    return {"analysis": ai_response}
+
+
 
 # 💬 GPT 대화 요청
 @router.post("/", response_model=ChatResponse)

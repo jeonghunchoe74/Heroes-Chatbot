@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-socketio[asyncio]
+httpx
+openai
+python-dotenv
+pandas
+openpyxl
