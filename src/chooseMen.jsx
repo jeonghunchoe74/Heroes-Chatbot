@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMentor } from "./mentorContext";
 import "./App.css";
-import Cloud2 from "./fonts/Cloud1.png";
+import Cloud2 from "./fonts/Cloud2.png";
 import back from "./fonts/back.png";
 import buffett from "./fonts/buffett.png";
 import cathie from "./fonts/cathie.png";
@@ -316,6 +316,7 @@ function ChooseMen({ onBack, onSelectPeter }) {
                     objectFit: "cover",
                     marginBottom: "12px",
                     marginTop: "10px",
+                    marginLeft: 100,
                 }}
                 />
                 <div

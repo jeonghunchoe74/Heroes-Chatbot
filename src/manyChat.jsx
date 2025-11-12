@@ -1,10 +1,15 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMentor } from "./mentorContext";
 import "./App.css";
 import personchatback from "./fonts/manyback.png";
-import menu from "./fonts/menu.png";
+import profile from "./fonts/profile.png";
 import send1 from "./fonts/send1.png";
+import send2 from "./fonts/send2.png";
+import send3 from "./fonts/send3.png";
 import peterface from "./fonts/peterface.png";
+import woodface from "./fonts/woodface.png";
+import buffettface from "./fonts/buffettface.png";
 
 
 function ManyChat({ onOpenMenu }) {
@@ -16,13 +21,45 @@ function ManyChat({ onOpenMenu }) {
     const [popupMessages, setPopupMessages] = useState([]);
     const [popupInput, setPopupInput] = useState("");
     const [showQuestion, setShowQuestion] = useState(false);
+    const [groupMessages, setGroupMessages] = useState([]);   // 단체 메시지
+    const [personalMessages, setPersonalMessages] = useState([]);
+    const [chatType, setChatType] = useState("단체"); // "개인" 또는 "단체"
 
+
+    const navigate = useNavigate();
     const popupRef = useRef(null);
     const startY = useRef(0);
     const currentY = useRef(0);
     const isDragging = useRef(false);
     const mentorName = getMentor("chooseRoomMentor") || "피터 린치";
     const stockName = getMentor("chooseRoomStock") || "삼성전자";
+
+    const mentorData = {
+        "피터 린치": {
+            img: peterface,
+            engName : "Peter Lynch",
+            color: "#f1f9ffff",
+            subColor: "#5353b0ff",
+            buttonColor: "#4FA3F7",
+            send: send1,
+        },
+        "워렌 버핏": { 
+            img: buffettface,
+            engName : "Warren Buffett",
+            color: " #e4eecfff",
+            subColor: "#6ca354ff",
+            buttonColor: "#8DC70D",
+            send: send2,
+        },
+        "캐시 우드": {
+            img: woodface,
+            engName : "Cathie Wood",
+            color: " #f7f2f2ff",
+            subColor: "#cea1a1ff",
+            buttonColor: "#ca726fff",
+            send: send3,
+        },
+    };
 
     const mentors = [
         {
@@ -44,9 +81,15 @@ function ManyChat({ onOpenMenu }) {
     ];
 
     const handleSend = () => {
-        if (!inputText.trim()) return;
-        setMessages([...messages, inputText]);
-        setInputText("");
+    if (!inputText.trim()) return;
+
+    if (chatType === "단체") {
+        setGroupMessages((prev) => [...prev, inputText]);
+    } else {
+        setPersonalMessages((prev) => [...prev, inputText]);
+    }
+
+    setInputText("");
     };
 
     const openPopup = () => {
@@ -163,7 +206,7 @@ function ManyChat({ onOpenMenu }) {
                 marginTop: 10,
                 width: 70,
                 height: 28,
-                background: "#4FA3F7",
+                background: mentorData[mentorName].buttonColor,
                 color: "white",
                 borderRadius: 10,
                 textAlign: "center",
@@ -205,26 +248,78 @@ function ManyChat({ onOpenMenu }) {
         {/* 상단 헤더 */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", zIndex: 2 }}>
             <div style={{ height: 60, background: "#D9D9D9" }} />
-            <div
-            style={{
-                height: 55,
-                background: "white",
-                boxShadow: "0px 4px 120px rgba(57, 86, 77, 0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-            }}
-            >
-            <img
-                src={menu}
-                alt="menu"
-                onClick={onOpenMenu}
-                style={{ position: "absolute", left: 15, top: 15, width: 25, height: 25, cursor: "pointer" }}
-            />
-            <div style={{ color: "#27292E", fontSize: 16, fontWeight: 700 }}>
-                {stockName} with {mentorName}
-            </div>
+                <div
+                style={{
+                    height: 55,
+                    background: "white",
+                    boxShadow: "0px 4px 120px rgba(57, 86, 77, 0.15)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    position: "relative",
+                    padding: "0 15px",
+                }}
+                >
+                <img
+                    src={profile}
+                    alt="profile"
+                    onClick={() => navigate("/mypage")}
+                    style={{ width: 25, marginTop:20, cursor: "pointer" }}
+                />
+                <div style={{ color: "#27292E", fontSize: 16, marginLeft:60, fontWeight: 700 }}>
+                    {stockName} with {mentorName}
+                </div>
+
+                {/* 개인/단체 선택 */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <div
+                        style={{
+                        position: "relative",
+                        width: "55px",
+                        height: "20px",
+                        border: "0.1px solid #a5a5a5ff",
+                        background: "#E0E0E0",
+                        borderRadius: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "4px",
+                        marginTop: "8px",
+                        marginLeft: "20px"
+                        }}
+                    >
+                        <div
+                        style={{
+                            position: "absolute",
+                            width: "28px",
+                            height: "20px",
+                            background: "#ffffff",
+                            borderRadius: "16px",
+                            top: "4px",
+                            left: chatType === "단체" ? "4px" : "30px",
+                            transition: "left 0.3s ease-in-out",
+                        }}
+                        ></div>
+                        {["단체", "개인"].map((type) => (
+                        <button
+                            key={type}
+                            onClick={() => setChatType(type)}
+                            style={{
+                            flex: 1,
+                            textAlign: "center",
+                            fontSize: "8.3px",
+                            fontWeight: 600,
+                            background: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#666",
+                            zIndex: 1,
+                            }}
+                        >
+                            {type}
+                        </button>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -240,7 +335,7 @@ function ManyChat({ onOpenMenu }) {
             paddingBottom: 120,
             }}
         >
-            {mentors.map((mentor, index) => (
+            {/* {mentors.map((mentor, index) => (
             <LeftBubble
                 key={index}
                 color={mentor.color}
@@ -250,10 +345,18 @@ function ManyChat({ onOpenMenu }) {
             >
                 {mentor.message}
             </LeftBubble>
-            ))}
+            ))} */}
 
-            {messages.map((msg, index) => (
-            <div key={index} style={{ display: "flex", justifyContent: "flex-end", marginTop: 10, paddingRight: 14 }}>
+            {(chatType === "단체" ? groupMessages : personalMessages).map((msg, index) => (
+            <div
+                key={index}
+                style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: 10,
+                paddingRight: 14,
+                }}
+            >
                 <div
                 style={{
                     background: "#fbeb56ff",
@@ -269,6 +372,7 @@ function ManyChat({ onOpenMenu }) {
                 </div>
             </div>
             ))}
+
         </div>
 
         {/* 하단 입력창 */}
@@ -316,7 +420,7 @@ function ManyChat({ onOpenMenu }) {
                 width: "100%",
                 }}
             />
-            <img src={send1} alt="send" onClick={handleSend} style={{ width: 18, height: 18, cursor: "pointer" }} />
+            <img src={mentorData[mentorName].send} alt="send" onClick={handleSend} style={{ width: 18, marginTop:20, cursor: "pointer" }} />
             </div>
         </div>
 
@@ -347,7 +451,7 @@ function ManyChat({ onOpenMenu }) {
                 bottom: 0,
                 width: "100%",
                 height: 760,
-                background: "#f1f9ffff",
+                background: mentorData[mentorName].color,
                 borderTopLeftRadius: 25,
                 borderTopRightRadius: 25,
                 zIndex: 4,
@@ -389,57 +493,58 @@ function ManyChat({ onOpenMenu }) {
                 </div>
 
                 <div style={{ flex: 1, overflowY: "auto" }}>
-                {/* ✅ 피터 린치 말풍선 */}
+                {/* ✅ 피터 린치 말풍선 (mentorName에 따라 변경됨) */}
                 {showQuestion && (
-                    <div style={{ display: "flex", flexDirection: "column", marginTop: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", marginTop: 10 }}>
                     <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                        <div
-    style={{
-        width: 32,
-        height: 32,
-        borderRadius: "50%",
-        overflow: "hidden", // 이미지를 원 안에 잘라 넣기
-        transform: "translateY(3px)",
-        background: '#5353b0ff',
-    }}
-    >
-    <img
-        src={peterface}
-        alt="peter"
-        style={{
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        }}
-    />
-    </div>
+                    <div
+                        style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        transform: "translateY(3px)",
+                        background: mentorData[mentorName].subColor,
+                        }}
+                    >
+                        <img
+                        src={mentorData[mentorName].img}
+                        alt={mentorName}
+                        style={{
+                            width: "90%",
+                            objectFit: "cover",
+                            transform: "translateY(-1px) translateX(1px)",
+                        }}
+                        />
+                    </div>
 
-                        <div style={{ fontWeight: 700, fontSize: 12, color: "#333", marginTop: 2 }}>
-                        피터 린치
-                        </div>
+                    <div style={{ fontWeight: 700, fontSize: 12, color: "#333", marginTop: 2 }}>
+                        {mentorName}
+                    </div>
                     </div>
 
                     <div style={{ display: "flex", alignItems: "flex-start", gap: 8, paddingLeft: 40 }}>
-                        <div
+                    <div
                         style={{
-                            background: "#F9F9F9",
-                            borderRadius: 10,
-                            borderTopLeftRadius: 0,
-                            padding: "10px 13px",
-                            maxWidth: 250,
-                            fontSize: 12,
-                            lineHeight: "18px",
-                            textAlign: "left", // ✅ 왼쪽 정렬 추가
-                            boxShadow: "0px 2px 6px rgba(0,0,0,0.08)",
-                            transform: "translateY(-4px)",
+                        background: "#ffffff",
+                        borderRadius: 10,
+                        borderTopLeftRadius: 0,
+                        padding: "10px 13px",
+                        maxWidth: 250,
+                        fontSize: 12,
+                        lineHeight: "18px",
+                        textAlign: "left",
+                        boxShadow: "0px 2px 6px rgba(0,0,0,0.08)",
+                        transform: "translateY(-4px)",
                         }}
-                        >
+                    >
                         최근 이 뉴스에 대해 어떻게 생각하나?  
                         향후 시장에 어떤 영향을 줄 것 같지?
-                        </div>
                     </div>
                     </div>
+                </div>
                 )}
+
 
                 {/* 내가 입력한 메시지 */}
                 {popupMessages.map((msg, i) => (
@@ -520,7 +625,7 @@ function ManyChat({ onOpenMenu }) {
                     width: "100%",
                     }}
                 />
-                <img src={send1} alt="send" onClick={handlePopupSend} style={{ width: 18, height: 18, cursor: "pointer" }} />
+                <img src={mentorData[mentorName].send} alt="send" onClick={handlePopupSend} style={{ width: 18, marginTop:20, cursor: "pointer" }} />
                 </div>
             </div>
             </>

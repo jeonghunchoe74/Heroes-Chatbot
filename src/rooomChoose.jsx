@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useMentor } from "./mentorContext"; 
 import "./App.css";
-import Cloud2 from "./fonts/Cloud1.png"; 
+import Cloud2 from "./fonts/Cloud2.png"; 
 import back from "./fonts/back.png"; 
 import peter from "./fonts/peter.png";
 import cathie from "./fonts/cathie.png";
@@ -11,32 +11,73 @@ import buffett from "./fonts/buffett.png";
 const mentorData = {
     "피터 린치": {
         img: peter,
+        engName : "Peter Lynch",
         color: "#2580DE",
-        cardBg: "#F5F5F5",
+        subColor: "#91b8dfff",
+        subColor2: "#e1eaf3ff",
+        cardBg: "#ffffffff",
         cardBorder: "#000000",
         tags: ["삼성전자", "LG화학"],
     },
-    "워렌 버핏": {
+    "워렌 버핏": { 
         img: buffett,
-        color: "#9FDD18",
-        cardBg: "#F5F5F5",
+        engName : "Warren Buffett",
+        color: "#8DC70D",
+        subColor: "#c2d499ff",
+        subColor2: "#e4eecfff",
+        cardBg: "#ffffffff",
         cardBorder: "#000000",
         tags: ["애플", "코카콜라"],
     },
     "캐시 우드": {
         img: cathie,
+        engName : "Cathie Wood",
         color: "#EF5A56",
-        cardBg: "#F5F5F5",
+        subColor: "#ecb3b1ff",
+        subColor2: "#f8e2e1ff",
+        cardBg: "#ffffffff",
         cardBorder: "#000000",
         tags: ["테슬라", "엔비디아"],
     },
 };
 
 function RoomChoose({ onBack }) {
-    const { getMentor } = useMentor(); 
+    const { getMentor, saveMentor } = useMentor(); 
     const mentorName = getMentor("chooseRoomMentor") || "피터 린치";
     const mentor = mentorData[mentorName];
     const navigate = useNavigate(); 
+
+    // ✅ 선택된 태그 상태 추가
+    const [selectedTag, setSelectedTag] = useState(null);
+
+    // ✅ 검색어 상태
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredTags, setFilteredTags] = useState([]);
+
+    // ✅ 선택 시 input에 값 고정 + 비활성화
+    const handleTagClick = (tag) => {
+        setSelectedTag(tag);
+        setSearchTerm(tag); // input에 선택한 종목 이름 표시
+        saveMentor("chooseRoomStock", tag);
+        setFilteredTags([]);
+    };
+
+    // ✅ input 수정 시 자동완성 업데이트
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        setSelectedTag(null); // 다시 검색 시작하면 선택 해제
+
+        if (value.trim() === "") {
+            setFilteredTags([]);
+        } else {
+            const matches = mentor.tags.filter((tag) =>
+                tag.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredTags(matches);
+        }
+    };
+    
 
     return (
         <div style={{ width: "100vw", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -108,50 +149,106 @@ function RoomChoose({ onBack }) {
                 />
                 <div style={{ width: 180, left: 109, top: 383, position: "absolute", textAlign: "center", color: "black", fontFamily: "SF Pro" }}>
                     <div style={{ fontSize: 20, fontWeight: "700", lineHeight: "25px" }}>{mentorName}</div>
-                    <div style={{ fontSize: 14, fontWeight: "700", lineHeight: "25px" }}>({mentorName})</div>
+                    <div style={{ fontSize: 14, fontWeight: "700", lineHeight: "25px" }}>({mentor.engName})</div>
                 </div>
 
                 {/* 검색창 */}
                 <div style={{ left: 20, top: 500, position: "absolute", textAlign: "center", color: "black", fontSize: 15, fontFamily: "SF Pro", fontWeight: "590", lineHeight: "25px" }}>
                     종목을 검색해주세요
                 </div>
-                <div style={{ width: 362, height: 38, left: 20, top: 530, position: "absolute", background: "white", borderRadius: 10, border: "1px solid #ccc" }} />
-                <div style={{ left: 30, top: 537, position: "absolute", color: "#9D9D9D", fontSize: 11, fontFamily: "SF Pro", fontWeight: "590" }}>
-                    예: 키움증권
-                </div>
+
+                {/* ✅ input 직접 사용 */}
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder={selectedTag ? "" : "예: 키움증권"}
+                    style={{
+                        width: 362,
+                        height: 38,
+                        left: 20,
+                        top: 530,
+                        position: "absolute",
+                        borderRadius: 10,
+                        border: "1px solid #ccc",
+                        paddingLeft: 10,
+                        fontSize: 12,
+                        fontFamily: "SF Pro",
+                    }}
+                />
+
+                {/* ✅ 자동완성 리스트 */}
+                {filteredTags.length > 0 && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 570,
+                            left: 20,
+                            width: 362,
+                            background: "white",
+                            border: "1px solid #ccc",
+                            borderRadius: 10,
+                            zIndex: 10,
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                        }}
+                    >
+                        {filteredTags.map((tag, index) => (
+                            <div
+                                key={index}
+                                onClick={() => handleTagClick(tag)}
+                                style={{
+                                    padding: "8px 12px",
+                                    cursor: "pointer",
+                                    fontSize: 13,
+                                    color: "#333",
+                                    borderBottom:
+                                        index < filteredTags.length - 1
+                                            ? "1px solid #eee"
+                                            : "none",
+                                    background:
+                                        selectedTag === tag ? "#E2F2FF" : "white",
+                                }}
+                            >
+                                {tag}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* 추천 종목 태그 */}
-                {mentor.tags.map((tag, idx) => (
-                    <React.Fragment key={idx}>
-                        <div
-                            style={{
-                                width: 62,
-                                height: 26,
-                                left: 20 + idx * 76,
-                                top: 577,
-                                position: "absolute",
-                                background: "#E2F2FF",
-                                borderRadius: 15,
-                                cursor: "pointer",
-                            }}
-                            onClick={() => saveMentor("chooseRoomStock", tag)} // ✅ 클릭 시 저장
-                        />
-                        <div
-                            style={{
-                                left: 32 + idx * 76,
-                                top: 583,
-                                position: "absolute",
-                                color: "#5E5E5E",
-                                fontSize: 10,
-                                fontFamily: "SF Pro",
-                                fontWeight: "510",
-                            }}
-                        >
-                            {tag}
-                        </div>
-                    </React.Fragment>
-                ))}
-
+                    {mentor.tags.map((tag, idx) => {
+                    const isSelected = selectedTag === tag;
+                    return (
+                        <React.Fragment key={idx}>
+                            <div
+                                key={idx}
+                                onClick={() => handleTagClick(tag)}
+                                style={{
+                                    width: 62,
+                                    height: 26,
+                                    left: 20 + idx * 76,
+                                    top: 590,
+                                    position: "absolute",
+                                    background: mentor.subColor2,
+                                    borderRadius: 15,
+                                    cursor: "pointer",
+                                    border: isSelected ? "2px solid #626262ff" : "none",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color:  "#5E5E5E",
+                                    fontSize: 10,
+                                    fontFamily: "SF Pro",
+                                    fontWeight: "510",
+                                    transition: "all 0.2s ease",
+                                    userSelect: "none",
+                                }}
+                            >
+                                {tag}
+                            </div>
+                        </React.Fragment>
+                    );
+                })}
                 {/* 구분선 */}
                 <div style={{ width: 362, height: 0, left: 20, top: 634, position: "absolute", borderTop: "1.2px solid #B2ADAD" }} />
 
@@ -172,8 +269,8 @@ function RoomChoose({ onBack }) {
                     <div
                         style={{
                             width: 83,
-                            left: 160,
-                            top: 10,
+                            left: 138,
+                            top: 13,
                             position: "absolute",
                             textAlign: "center",
                             color: "white",
@@ -194,7 +291,7 @@ function RoomChoose({ onBack }) {
                         left: 19,
                         top: 727,
                         position: "absolute",
-                        background: "#84BBF3",
+                        background: mentor.subColor,
                         border: "2px solid black",
                         cursor: "pointer",
                     }}
@@ -203,8 +300,8 @@ function RoomChoose({ onBack }) {
                     <div
                         style={{
                             width: 105,
-                            left: 52,
-                            top: 10,
+                            left: 34,
+                            top: 12,
                             position: "absolute",
                             textAlign: "center",
                             color: "white",
@@ -225,7 +322,7 @@ function RoomChoose({ onBack }) {
                         left: 211,
                         top: 727,
                         position: "absolute",
-                        background: "#84BBF3",
+                        background: mentor.subColor,
                         border: "2px solid black",
                         cursor: "pointer",
                     }}
@@ -234,8 +331,8 @@ function RoomChoose({ onBack }) {
                     <div
                         style={{
                             width: 104,
-                            left: 244,
-                            top: 10,
+                            left: 34,
+                            top: 12,
                             position: "absolute",
                             textAlign: "center",
                             color: "white",
