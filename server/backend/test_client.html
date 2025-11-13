@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head><meta charset="utf-8"><title>Socket.IO 단톡 테스트</title></head>
+    <body>
+        <h3>단톡 테스트 (ns=/room)</h3>
+        <button id="join">대기열 합류 (buffett/AAPL)</button>
+        <button id="send">뉴스 전송(ON=봇호출)</button>
+        <pre id="log" style="height:300px;overflow:auto;border:1px solid #ccc"></pre>
+
+        <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+        <script>
+        const log = (...args)=>{ document.querySelector('#log').textContent += args.join(' ')+'\n'; };
+
+        // 서버에 연결 (네임스페이스 /room, 마운트 /ws)
+        const socket = io("http://127.0.0.1:8000/room");
+
+        socket.on("connect", ()=> log("[connect] sid=", socket.id));
+        socket.on("connected", (d)=> log("[connected]", JSON.stringify(d)));
+        socket.on("queued", (d)=> log("[queued]", JSON.stringify(d)));
+        socket.on("matched", (d)=> { log("[matched]", JSON.stringify(d)); window._roomId = d.room_id; });
+        socket.on("system", (d)=> log("[system]", JSON.stringify(d)));
+        socket.on("message", (d)=> log("[message]", JSON.stringify(d)));
+        socket.on("mentor_feedback", (d)=> log("[mentor_feedback]", JSON.stringify(d)));
+        socket.on("error", (e)=> log("[error]", JSON.stringify(e)));
+
+        document.querySelector('#join').onclick = ()=>{
+            const user = "u" + Math.floor(Math.random()*10000);
+            socket.emit("join_queue", { guru_id: "buffett", ticker: "AAPL", user_id: user });
+            log("→ join_queue:", user);
+        };
+
+        document.querySelector('#send').onclick = ()=>{
+            if (!window._roomId) { log("room_id 아직 없음(매칭 5명 필요)"); return; }
+            socket.emit("send_message", {
+            room_id: window._roomId,
+            author: "u_local",
+            phase: "news_insight",
+            deliver_to_bot: true,
+            content: { title: "테스트 뉴스", url: "https://example.com", summary3: ["a","b","c"], value: "가치 한줄" }
+            });
+            log("→ send_message (ON)");
+        };
+        </script>
+    </body>
+</html>

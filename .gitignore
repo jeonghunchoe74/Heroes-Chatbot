@@ -2,3 +2,6 @@
 
 # 모든 .env 파일을 무시합니다.
 *.env
+
+# Vite cache
+.vite/

@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+python-socketio[asgi]
+langchain-openai
+langgraph
+pandas
+openpyxl
