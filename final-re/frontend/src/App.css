@@ -1,0 +1,169 @@
+/* 카톡 느낌 기본색 */
+:root { --kakao: #FEE500; --bg:#f5f5f7; --my:#fff27a; --other:#ffffff; --sys:#8a8a8a; }
+
+.app { height: 100vh; background: var(--bg); display:flex; flex-direction:column; }
+.header { height:56px; padding:0 16px; display:flex; align-items:center; justify-content:space-between; font-weight:700; }
+.header .spacer { flex:1; }
+.header .controls { display:flex; align-items:center; gap:12px; font-weight:400; font-size:12px; }
+.header .controls .current-guru { color:#333; }
+.header .controls .gurus { display:flex; gap:6px; }
+.header .controls .gurus button { padding:6px 10px; border:1px solid #d0d0d0; border-radius:12px; background:#fff; font-weight:500; cursor:pointer; }
+.header .controls .gurus button.active { background:#333; color:#fff; border-color:#333; }
+.mentor-toggle { padding:6px 10px; border:1px solid #d0d0d0; border-radius:12px; background:#fff; font-weight:600; cursor:pointer; }
+.mentor-toggle.on { background:#333; color:#fff; border-color:#333; }
+.mentor-toggle.off { background:#fff; color:#333; border-color:#d0d0d0; opacity:0.9; }
+.messages { flex:1; overflow:auto; padding: 12px 12px 0 12px; display:flex; flex-direction:column; gap:8px; }
+.messages.drag { outline:2px dashed #bbb; outline-offset:-6px; }
+.preview { display:flex; gap:10px; text-decoration:none; color:inherit; background:#fff; border:1px solid #e8e8ee; border-radius:12px; padding:10px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.preview + .preview { margin-top:8px; }
+.preview-thumb { width:72px; height:72px; border-radius:8px; background-size:cover; background-position:center; background-color:#f2f2f5; flex:0 0 72px; }
+.preview-body { display:flex; flex-direction:column; gap:4px; min-width:0; }
+.preview-title { font-weight:700; font-size:14px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.preview-desc { font-size:12px; color:#555; max-height:2.8em; overflow:hidden; }
+.preview-host { font-size:11px; color:#888; }
+.filecard { max-width:60%; background:#fff; border:1px solid #e8e8ee; border-radius:12px; padding:10px 12px; text-decoration:none; color:inherit; box-shadow:0 1px 2px rgba(0,0,0,.06); display:block; }
+.filetitle { font-weight:700; margin-bottom:4px; }
+.filesub { font-size:11px; color:#777; margin-bottom:6px; }
+.filepreview { font-size:12px; color:#444; max-height:4.5em; overflow:hidden; }
+.row { display:flex; gap:8px; align-items:flex-end; }
+.row.me { justify-content:flex-end; }
+.avatar { width:28px; height:28px; border-radius:50%; background:#ddd; display:flex; align-items:center; justify-content:center; font-size:12px; }
+.file-header { display:flex; align-items:center; gap:6px; font-weight:700; font-size:13px; margin-bottom:4px; }
+.file-icon { font-size:14px; }
+.file-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px; }
+.file-sub { font-size:11px; color:#777; margin-bottom:6px; }
+.file-summary { font-size:12px; color:#444; max-height:4.5em; overflow:hidden; }
+.bubble { max-width:60%; padding:10px 12px; border-radius:16px; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+.me .bubble { background: var(--kakao); }
+.other .bubble { background: var(--other); }
+.meta { font-size:11px; color:#666; margin:0 4px; white-space:nowrap; }
+.sys { text-align:center; color:var(--sys); font-size:12px; margin:6px 0; }
+
+.inputBar { padding:10px; display:flex; gap:8px; background:#fff; box-shadow:0 -2px 10px rgba(0,0,0,.04); }
+.inputBar .attach { padding:0 12px; border-radius:12px; border:1px solid #e5e5ec; background:#fff; cursor:pointer; }
+.inputBar textarea { flex:1; resize:none; height:42px; padding:10px; border-radius:12px; border:1px solid #e5e5ec; outline:none; }
+.inputBar button.send { padding:0 16px; border-radius:12px; border:none; background:#333; color:#fff; font-weight:600; }
+.nameGate { padding:16px; display:flex; gap:8px; }
+.nameGate input { padding:10px; border:1px solid #e5e5ec; border-radius:10px; }
+.nameGate button { padding:10px 16px; border-radius:10px; border:none; background:#333; color:#fff; }
+
+/* 분석하기 버튼 */
+.analyze-bar { margin-top:8px; }
+.analyze-btn {
+  padding:6px 10px;
+  border:1px solid #e1e1e8;
+  border-radius:999px;
+  background:#fff;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.analyze-btn:hover { background:#f7f7fb; }
+
+/* 바텀시트 */
+.sheet-backdrop {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.25);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+  z-index:40;
+}
+.sheet-backdrop.open {
+  opacity:1;
+  pointer-events:auto;
+}
+.sheet {
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:90vh;
+  background:#fff;
+  border-top-left-radius:16px;
+  border-top-right-radius:16px;
+  box-shadow:0 -10px 30px rgba(0,0,0,.2);
+  transform:translateY(100%);
+  transition:transform .28s ease;
+  display:flex;
+  flex-direction:column;
+  z-index:41;
+}
+.sheet.open { transform:translateY(0%); }
+.sheet.dragging { transition:none; }
+.sheet-grip {
+  width:40px;
+  height:4px;
+  border-radius:4px;
+  background:#ddd;
+  align-self:center;
+  margin:10px 0;
+}
+.sheet-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px 8px 16px;
+  border-bottom:1px solid #f0f0f4;
+}
+.sheet-title { font-weight:700; }
+.sheet-close {
+  border:none;
+  background:#f5f5f7;
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+.sheet-grip,
+.sheet-head {
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+}
+.sheet-body {
+  padding:14px 16px;
+  overflow:auto;
+}
+.sheet-muted { color:#666; font-size:13px; }
+.sheet-composer {
+  display:flex;
+  gap:8px;
+  padding-top:10px;
+}
+.sheet-composer input {
+  flex:1;
+  border:1px solid #e5e5ec;
+  border-radius:10px;
+  padding:8px 10px;
+}
+.sheet-composer button {
+  border:1px solid #e5e5ec;
+  background:#fff;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@font-face {
+  font-family: 'SF Pro';
+  src: url('./fonts/SF-Pro.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hakgyoansim_PosterOTFB';
+  src: url('./fonts/Hakgyoansim_PosterOTFB.otf') format('truetype');
+  font-style: normal;
+}

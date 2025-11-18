@@ -1,0 +1,10 @@
+Requirement already satisfied: redis in c:\users\edukd\miniconda3\envs\proj_2\lib\site-packages (3.5.3)
+Collecting redis
+  Downloading redis-7.0.1-py3-none-any.whl.metadata (12 kB)
+Downloading redis-7.0.1-py3-none-any.whl (339 kB)
+Installing collected packages: redis
+  Attempting uninstall: redis
+    Found existing installation: redis 3.5.3
+    Uninstalling redis-3.5.3:
+      Successfully uninstalled redis-3.5.3
+Successfully installed redis-7.0.1

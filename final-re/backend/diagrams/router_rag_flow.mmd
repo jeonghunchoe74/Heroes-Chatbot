@@ -1,0 +1,36 @@
+flowchart LR
+
+    %% ===== Client =====
+    subgraph Client
+        C[Client]
+    end
+
+    %% ===== FastAPI Layer =====
+    subgraph API
+        F[FastAPI chatbot handler]
+    end
+
+    %% ===== LangGraph Orchestration =====
+    subgraph LangGraph
+        S[Orchestration State]
+        R[Router Node]
+        G[RAG Node]
+        L[Loader Node]
+        A[REST API Node]
+        M[Mentor Agent Node]
+    end
+
+    %% ===== Data & External Systems =====
+    subgraph Data
+        J[RAG Cache]
+        K[Kiwoom REST API]
+    end
+
+    %% ----- Main request flow -----
+    C -->|JSON request| F -->|create state| S
+    S --> R --> G --> L --> A --> M --> S
+    M -->|JSON response| F --> C
+
+    %% ----- Data connections -----
+    L -->|read data| J
+    A -->|HTTP call| K
